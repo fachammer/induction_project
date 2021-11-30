@@ -15,20 +15,15 @@ fun reverse :: "lst \<Rightarrow> lst" where
 fun reverse_n :: "nat \<Rightarrow> lst \<Rightarrow> lst" where
 "reverse_n zero xs = xs" |
 "reverse_n (s n) xs = reverse (reverse_n n xs)"
-
-
-(*
-fun even :: "nat \<Rightarrow> bool" where
-"even zero = True" |
-"even (s zero) = False" |
-"even (s (s n)) = even n"
-*)
-
+ 
+fun even_fn :: "nat \<Rightarrow> bool" where
+"even_fn zero = True" |
+"even_fn (s zero) = False" |
+"even_fn (s (s n)) = even_fn n"
 
 inductive even :: "nat \<Rightarrow> bool" where
 "even zero" |
 "even n \<Longrightarrow> even (s (s n))"
-
 
 lemma reverse_snoc: "reverse (snoc xs x) = cons x (reverse xs)" proof(induct xs)
 case nil
@@ -49,24 +44,25 @@ then show ?case by (simp add: reverse_snoc)
 qed
 qed
 
-lemma reverse_n_involution: "\<And>n. \<And>xs. reverse_n (s (s n)) xs = reverse_n n xs" proof -
-fix n
-show "\<And>xs. reverse_n (s (s n)) xs = reverse_n n xs" proof(induct n)
-case zero
-then show ?case by (simp add: reverse_involution)
+lemma "\<And>n xs. (even n \<Longrightarrow> reverse_n n xs = xs)" proof (rule even.induct)
+show "\<And>n xs. reverse_even.even n \<Longrightarrow> reverse_even.even n" by simp
 next
-case (s n)
-then show ?case by simp
-qed
+show "\<And>n xs. reverse_even.even n \<Longrightarrow> reverse_n zero xs = xs" by simp
+next
+show 
+"\<And>n xs na. 
+reverse_even.even n
+\<Longrightarrow> reverse_even.even na 
+\<Longrightarrow> reverse_n na xs = xs 
+\<Longrightarrow> reverse_n (s (s na)) xs = xs" by (simp add: reverse_involution)
 qed
 
-lemma "\<And>n. \<And>xs. (even n \<Longrightarrow> reverse_n n xs = xs)" proof -
-fix n
-show "\<And>xs. (even n \<Longrightarrow> reverse_n n xs = xs)" proof(rule even.induct)
-show "\<And>xs. reverse_even.even n \<Longrightarrow> reverse_even.even n" by simp
-show "\<And>xs. reverse_even.even n \<Longrightarrow> reverse_n zero xs = xs" by simp
-show "\<And>xs na. reverse_even.even n \<Longrightarrow> reverse_even.even na \<Longrightarrow> reverse_n na xs = xs \<Longrightarrow> reverse_n (s (s na)) xs = xs" by (simp add: reverse_n_involution reverse_involution)
-qed
+lemma "\<And>n xs. (even_fn n \<longrightarrow> reverse_n n xs = xs)" proof (rule even_fn.induct)
+show "\<And>n xs. even_fn n \<longrightarrow> reverse_n zero xs = xs" by simp
+next
+show "\<And>n xs. even_fn (s zero) \<longrightarrow> reverse_n (s zero) xs = xs" by simp
+next
+show "\<And>n xs na. even_fn na \<longrightarrow> reverse_n na xs = xs \<Longrightarrow> even_fn (s (s na)) \<longrightarrow> reverse_n (s (s na)) xs = xs" by (simp add: reverse_involution)
 qed
 
 end
