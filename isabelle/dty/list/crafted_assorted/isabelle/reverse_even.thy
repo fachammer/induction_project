@@ -62,7 +62,11 @@ show "\<And>n xs. even_fn n \<longrightarrow> reverse_n zero xs = xs" by simp
 next
 show "\<And>n xs. even_fn (s zero) \<longrightarrow> reverse_n (s zero) xs = xs" by simp
 next
-show "\<And>n xs na. even_fn na \<longrightarrow> reverse_n na xs = xs \<Longrightarrow> even_fn (s (s na)) \<longrightarrow> reverse_n (s (s na)) xs = xs" by (simp add: reverse_involution)
+show 
+"\<And>n xs na. even_fn na 
+\<longrightarrow> reverse_n na xs = xs 
+\<Longrightarrow> even_fn (s (s na)) 
+\<longrightarrow> reverse_n (s (s na)) xs = xs" by (simp add: reverse_involution)
 qed
 
 end
