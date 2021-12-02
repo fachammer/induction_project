@@ -25,12 +25,17 @@ inductive even :: "nat \<Rightarrow> bool" where
 "even zero" |
 "even n \<Longrightarrow> even (s (s n))"
 
-lemma reverse_snoc: "reverse (snoc xs x) = cons x (reverse xs)" proof(induct xs)
+lemma reverse_snoc: "\<And>xs. \<And>x. reverse (snoc xs x) = cons x (reverse xs)"
+proof -
+fix xs
+show "\<And>x. reverse (snoc xs x) = cons x (reverse xs)"
+proof(induct xs)
 case nil
 then show ?case by simp
 next
 case (cons x1 xs)
 then show ?case by simp
+qed
 qed
 
 lemma reverse_involution: "\<And>xs. reverse (reverse xs) = xs" proof -
@@ -44,7 +49,7 @@ then show ?case by (simp add: reverse_snoc)
 qed
 qed
 
-lemma "\<And>n xs. (even n \<Longrightarrow> reverse_n n xs = xs)" proof (rule even.induct)
+theorem "\<And>n xs. (even n \<Longrightarrow> reverse_n n xs = xs)" proof (rule even.induct)
 show "\<And>n xs. reverse_even.even n \<Longrightarrow> reverse_even.even n" by simp
 next
 show "\<And>n xs. reverse_even.even n \<Longrightarrow> reverse_n zero xs = xs" by simp
@@ -57,7 +62,7 @@ reverse_even.even n
 \<Longrightarrow> reverse_n (s (s na)) xs = xs" by (simp add: reverse_involution)
 qed
 
-lemma "\<And>n xs. (even_fn n \<longrightarrow> reverse_n n xs = xs)" proof (rule even_fn.induct)
+theorem "\<And>n xs. (even_fn n \<longrightarrow> reverse_n n xs = xs)" proof (rule even_fn.induct)
 show "\<And>n xs. even_fn n \<longrightarrow> reverse_n zero xs = xs" by simp
 next
 show "\<And>n xs. even_fn (s zero) \<longrightarrow> reverse_n (s zero) xs = xs" by simp
