@@ -2,11 +2,12 @@
 (set-logic UFDT)
 (set-info :category "crafted")
 (declare-datatypes ((nat 0) (lst 0)) (((s (s0 nat)) (zero)) ((nil) (cons (cons0 nat) (cons1 lst)))))
+
 (define-fun-rec cnt
   ((x nat) (xs lst)) nat
   (match xs
     ((nil zero)
-     ((cons y ys) (ite (= x y) 
+     ((cons y ys) (ite (= x y)
                     (s (cnt x ys)) 
                     (cnt x ys))))))
 
@@ -24,8 +25,8 @@
              ((zero false)
               ((s y) (leq x y))))))))
 
-(assert (forall ((n nat) (m nat)) (=> (leq n m) (leq n (s m)))))
+; (assert (forall ((n nat) (m nat)) (=> (leq n m) (leq n (s m)))))
 ; (assert (forall ((n nat) (m nat)) (= (leq n m) (or (exists ((n0 nat)) (and (= n zero) (= m n0))) (exists ((n0 nat) (m0 nat)) (and (= n (s n0)) (= m (s m0)) (leq n0 m0)))))))
 
-(assert (not (forall ((n nat) (xs lst)) (leq (cnt n xs) (len xs)))))
+(assert (not (forall ((x nat) (xs lst)) (leq (cnt x xs) (len xs)))))
 (check-sat)
