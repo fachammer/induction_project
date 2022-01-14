@@ -28,5 +28,7 @@
 ; (assert (forall ((n nat) (m nat)) (=> (leq n m) (leq n (s m)))))
 ; (assert (forall ((n nat) (m nat)) (= (leq n m) (or (exists ((n0 nat)) (and (= n zero) (= m n0))) (exists ((n0 nat) (m0 nat)) (and (= n (s n0)) (= m (s m0)) (leq n0 m0)))))))
 
-(assert (not (forall ((x nat) (xs lst)) (leq (cnt x xs) (len xs)))))
+; (assert (not (forall ((x nat) (xs lst)) (leq (cnt x xs) (len xs)))))
+
+(assert (not (forall ((ys lst) (y nat) (x nat)) (=> (leq (cnt x ys) (len ys)) (leq (cnt x (cons y ys)) (len (cons y ys)))))))
 (check-sat)

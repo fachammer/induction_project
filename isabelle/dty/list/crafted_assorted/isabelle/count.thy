@@ -20,9 +20,9 @@ fun length :: "lst \<Rightarrow> nat" where
 "length nil = zero" |
 "length (cons x xs) = s (length xs)"
 
-fun count :: "nat \<Rightarrow> lst \<Rightarrow> nat" where
-"count x nil = zero" |
-"count x (cons y ys) = (if x=y then s (count x ys) else count x ys)"
+fun count :: "(nat \<Rightarrow> bool) \<Rightarrow> lst \<Rightarrow> nat" where
+"count p nil = zero" |
+"count p (cons y ys) = (if (p y) then s (count p ys) else count p ys)"
 
 lemma leq_s_right: "\<And>n. \<And>m. leq n m \<Longrightarrow> leq n (s m)"
 proof -
@@ -48,10 +48,9 @@ then show ?case by (metis leq_fn.elims(2) leq_fn.simps(1) leq_fn.simps(3))
 qed
 qed
 
-
-theorem "\<And>xs. \<And>x. leq (count x xs) (length xs)" proof -
+theorem "\<And>p. \<And>xs. leq (count p xs) (length xs)" proof -
 fix xs
-show "\<And>x. leq (count x xs) (length xs)" proof(induct xs)
+show "\<And>p. leq (count p xs) (length xs)" proof(induct xs)
 case nil
 then show ?case by simp
 next

@@ -9,8 +9,8 @@
   ((xs lst)) nat
   (match xs
     ((nil zero)
-     ((cons y ys) (ite (p y) 
-                    (s (cnt ys)) 
+     ((cons y ys) (ite (p y)
+                    (s (cnt ys))
                     (cnt ys))))))
 
 (define-fun-rec len
@@ -28,7 +28,11 @@
               ((s y) (leq x y))))))))
 
 ; (assert (forall ((n nat) (m nat)) (=> (leq n m) (leq n (s m)))))
-; (assert (forall ((n nat) (m nat)) (= (leq n m) (or (exists ((n0 nat)) (and (= n zero) (= m n0))) (exists ((n0 nat) (m0 nat)) (and (= n (s n0)) (= m (s m0)) (leq n0 m0)))))))
 
-(assert (not (forall ((xs lst)) (leq (cnt xs) (len xs)))))
+; (assert (forall ((y nat)) (or (p y) (not (p y)))))
+(assert (not (forall ((xs lst)) (leq (cnt xs) (len xs))))) 
+;(assert (not (forall ((ys lst) (y nat)) (=> (leq (cnt ys) (len ys)) (and (=> (not (p y)) (leq (cnt (cons y ys)) (len (cons y ys))))
+ ;                                                                        (=> (p y) (leq (cnt (cons y ys)) (len (cons y ys)))))))))
+;(assert (not (forall ((ys lst) (y nat)) (=> (leq (cnt ys) (len ys)) (not (p y)) (leq (cnt ys) (s (len ys)))))))
+
 (check-sat)
